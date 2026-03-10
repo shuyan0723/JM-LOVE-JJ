@@ -1,0 +1,13 @@
+# robots.txt for JM Love JJ
+User-agent: *
+Allow: /
+
+# 禁止爬取 API 相关路径
+Disallow: /api/
+
+# 禁止爬取管理后台（如果有）
+Disallow: /admin/
+
+# Sitemap 位置
+Sitemap: https://your-domain.com/sitemap.xml
+

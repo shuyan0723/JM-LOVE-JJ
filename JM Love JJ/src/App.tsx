@@ -9,11 +9,14 @@ import MusicPlayer from './components/MusicPlayer';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import PageLoader from './components/PageLoader';
+import SEO from './components/SEO';
 import NotFound from './pages/NotFound';
 
-// 懒加载路由组件 - 优化首屏加载速度
-const Login = lazy(() => import('./pages/Login'));
-const Home = lazy(() => import('./pages/Home'));
+// 关键页面直接导入 - 优化 SEO，确保搜索引擎能立即抓取内容
+import Home from './pages/Home';
+import Login from './pages/Login';
+
+// 其他页面懒加载 - 优化首屏加载速度
 const Music = lazy(() => import('./pages/Music'));
 const Community = lazy(() => import('./pages/Community'));
 const Concerts = lazy(() => import('./pages/Concerts'));
@@ -31,31 +34,19 @@ function AppContent() {
   return (
     <Router>
       <ErrorBoundary>
+        <SEO />
         <div className="min-h-screen bg-slate-950 flex flex-col pb-24">
           {isAuthenticated && <Header />}
           <main className="flex-1">
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                {/* 登录路由 */}
-                <Route 
-                  path="/login" 
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <Login />
-                    </Suspense>
-                  } 
-                />
+                {/* 登录路由 - 直接导入，优化 SEO */}
+                <Route path="/login" element={<Login />} />
 
-                {/* 受保护的路由 */}
+                {/* 首页 - 直接导入，优化 SEO */}
                 <Route 
                   path="/" 
-                  element={
-                    <ProtectedRoute element={
-                      <Suspense fallback={<PageLoader />}>
-                        <Home />
-                      </Suspense>
-                    } /> 
-                  } 
+                  element={<ProtectedRoute element={<Home />} />} 
                 />
                 <Route 
                   path="/music" 
